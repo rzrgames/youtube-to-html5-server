@@ -89,7 +89,7 @@ http.createServer(function(request, response) {
 	try {
 
      const options = ['--proxy', 'http://67.43.228.253:30415']
-const video = ytdl.getInfo(youtubeUrl,options);
+const video = ytdl.getInfo(youtubeUrl);
  
 response.end(video);
     
