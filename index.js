@@ -85,7 +85,7 @@ http.createServer(function(request, response) {
                 
 	try {
 
-           ytdl.getInfo(youtubeUrl, ytdlOptions);
+           const info = ytdl.getInfo(youtubeUrl, ytdlOptions);
 
 
     
