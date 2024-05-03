@@ -74,7 +74,7 @@ http.createServer(function(request, response) {
 
 	const idParam = queryObject?.id;
 	const urlParam = queryObject?.url;
-
+       
 	if (!idParam && !urlParam) {
 		sendError(response, 'Missing `url` or `id` paramater.');
 	} else {
@@ -85,11 +85,11 @@ http.createServer(function(request, response) {
 		 * @type {string}
 		 */
 		const youtubeUrl = idParam ? `https://www.youtube.com/watch?v=${idParam}` : urlParam;
-
+                const info = await getInfo(youtubeUrl);
 	try {
 
 
-const info = await getInfo(youtubeUrl);
+
 
     
     
