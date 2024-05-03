@@ -9,6 +9,29 @@ const successCacheAge = 14400; // 4hrs
 const errorCacheAge = 3600; // 1hrs
 
 
+
+const ytdlOptions = {
+    requestOptions: {
+        maxRetries: 5,
+        backoff: {inc: 2000, max: 2000},
+        transform: (parsed) => {
+            const originURL = parsed.protocol + "//" + parsed.hostname + parsed.path;
+            parsed.host = "proxy.darenliang.com";
+            parsed.hostname = "proxy.darenliang.com";
+            parsed.path = "/?url=" + encodeURIComponent(originURL);
+            parsed.protocol = "https:";
+            return parsed;
+        }
+    }
+};
+
+const getInfo = async url => {
+    console.log("[info] getting info");
+    return await ytdl.getInfo(url, ytdlOptions);
+};
+
+
+
 /**
  * Send response headers and data.
  *
