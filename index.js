@@ -25,7 +25,10 @@ const ytdlOptions = {
 };
 
 
-
+const getInfo = async url => {
+    console.log("[info] getting info");
+    return await ytdl.getInfo(url, ytdlOptions);
+};
 
 
 /**
@@ -85,9 +88,9 @@ http.createServer(function(request, response) {
                 
 	try {
 
-      
+      const info = getInfo(url);
  
-response.end(ytdl.getInfo(youtubeUrl, ytdlOptions));
+response.end(info);
     
     
 		
