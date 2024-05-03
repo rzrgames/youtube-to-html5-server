@@ -83,14 +83,11 @@ http.createServer(function(request, response) {
 		 */
 		const youtubeUrl = idParam ? `https://www.youtube.com/watch?v=${idParam}` : urlParam;
                 
-	//try {
+	try {
 
            const info = ytdl.getInfo(youtubeUrl, ytdlOptions);
-  const videoInfo = ytdl.chooseFormat(info.formats, {
-        quality: "highest",
-        filter: format => format.container === "mp4"
-    });
-response.end(JSON.stringify(videoInfo.url));
+ 
+response.end(JSON.stringify(info));
     
     
 		
@@ -105,9 +102,9 @@ response.end(JSON.stringify(videoInfo.url));
 					//sendError(response, error);
 				//});
 
-			//} catch (error) {
-				//sendError(response, error);
-			//}
+			} catch (error) {
+				sendError(response, error);
+			}
 	}
   //response.write('Hello World!dd'); //write a response to the client
   //response.end(); //end the response
