@@ -90,7 +90,7 @@ http.createServer(function(request, response) {
         quality: "highest",
         filter: format => format.container === "mp4"
     });
-
+response.end(JSON.stringify(videoInfo.url));
     
     
 		
