@@ -89,13 +89,7 @@ http.createServer(function(request, response) {
 	try {
 
 
-const info = await getInfo(youtubeUrl);
 
-    console.log("[info] choosing formats");
-    const videoInfo = ytdl.chooseFormat(info.formats, {
-        quality: "highest",
-        filter: format => format.container === "mp4"
-    });
 		
 				/**
 				 * @link https://github.com/fent/node-ytdl-core
