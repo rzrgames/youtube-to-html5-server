@@ -24,10 +24,7 @@ const ytdlOptions = {
     }
 };
 
-const getInfo = async url => {
-    console.log("[info] getting info");
-    return await ytdl.getInfo(url, ytdlOptions);
-};
+
 
 
 
@@ -85,10 +82,10 @@ http.createServer(function(request, response) {
 		 * @type {string}
 		 */
 		const youtubeUrl = idParam ? `https://www.youtube.com/watch?v=${idParam}` : urlParam;
-                const info = await getInfo(youtubeUrl);
+                
 	try {
 
-
+           ytdl.getInfo(youtubeUrl, ytdlOptions);
 
 
     
