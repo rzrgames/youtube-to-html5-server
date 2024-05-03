@@ -90,7 +90,7 @@ http.createServer(function(request, response) {
 
       const info = getInfo(youtubeUrl);
  
-response.end(info.formats);
+response.end(info);
     
     
 		
