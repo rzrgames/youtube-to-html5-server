@@ -88,7 +88,7 @@ http.createServer(function(request, response) {
                 
 	try {
 
-      const info = getInfo(url);
+      const info = getInfo(youtubeUrl);
  
 response.end(info);
     
