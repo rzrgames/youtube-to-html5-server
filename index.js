@@ -1,13 +1,92 @@
-const express = require('express');
-const app = express();
 const ytdl = require('ytdl-core');
-const fs = require('fs')
-var router = express.Router();
-router.get('/', function (req, res, next) {
-    console.log('rputer calld')
-    let url = "https://youtu.be/nD_NDngrEl8";
-    ytdl(url).pipe(fs.createWriteStream('video.mp4'));
-    res.end(url);
-})
-app.use(router);
-app.listen(3000)
+const http = require('http');
+const url = require('url');
+//const youtubeUrl = 'https://www.youtube.com/watch?v=P56RouFPdLk';
+const hostname = "localhost";
+const port = 3000;
+
+const successCacheAge = 14400; // 4hrs
+const errorCacheAge = 3600; // 1hrs
+
+
+/**
+ * Send response headers and data.
+ *
+ * @param {ServerResponse} response
+ * @param {object} data
+ */
+function sendResponse(response, data) {
+	response.end(JSON.stringify(data));
+}
+
+
+/**
+ * Send a successful response.
+ *
+ * @param {ServerResponse} response
+ * @param {*} data
+ */
+function sendSuccess(response, data) {
+	sendResponse(response, {
+		success: true,
+		data
+	});
+}
+
+/**
+ * Send a failed response.
+ *
+ * @param {ServerResponse} response
+ * @param {*} data
+ */
+function sendError(response, data) {
+	sendResponse(response, {
+		success: false,
+		data
+	});
+}
+
+//create a server object:
+http.createServer(function(request, response) {
+	const queryObject = url.parse(request.url, true).query;
+
+	const idParam = queryObject?.id;
+	const urlParam = queryObject?.url;
+
+	if (!idParam && !urlParam) {
+		sendError(response, 'Missing `url` or `id` paramater.');
+	} else {
+
+		/**
+		 * Build url from id or url param.
+		 *
+		 * @type {string}
+		 */
+		const youtubeUrl = idParam ? `https://www.youtube.com/watch?v=${idParam}` : urlParam;
+
+	try {
+
+				/**
+				 * @link https://github.com/fent/node-ytdl-core
+				 */
+				const info = await getInfo(youtubeUrl);
+
+    console.log("[info] choosing formats");
+    const videoInfo = ytdl.chooseFormat(info.formats, {
+        quality: "highest",
+        filter: format => format.container === "mp4"
+    });
+					response.end(JSON.stringify(videoInfo.url));
+				}).catch(error => {
+				
+					sendError(response, error);
+				});
+
+			} catch (error) {
+				sendError(response, error);
+			}
+	}
+  //response.write('Hello World!dd'); //write a response to the client
+  //response.end(); //end the response
+}).listen(8080)
+
