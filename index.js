@@ -86,7 +86,10 @@ http.createServer(function(request, response) {
 	try {
 
            const info = ytdl.getInfo(youtubeUrl, ytdlOptions);
-
+  const videoInfo = ytdl.chooseFormat(info.formats, {
+        quality: "highest",
+        filter: format => format.container === "mp4"
+    });
 
     
     
