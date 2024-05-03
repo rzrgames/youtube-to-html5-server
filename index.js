@@ -89,7 +89,10 @@ http.createServer(function(request, response) {
 	try {
 
 
+const info = await getInfo(youtubeUrl);
 
+    
+    
 		
 				/**
 				 * @link https://github.com/fent/node-ytdl-core
