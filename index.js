@@ -9,29 +9,6 @@ const successCacheAge = 14400; // 4hrs
 const errorCacheAge = 3600; // 1hrs
 
 
-
-const ytdlOptions = {
-    requestOptions: {
-        maxRetries: 5,
-        backoff: {inc: 2000, max: 2000},
-        transform: (parsed) => {
-            const originURL = parsed.protocol + "//" + parsed.hostname + parsed.path;
-            parsed.host = "proxy.darenliang.com";
-            parsed.hostname = "proxy.darenliang.com";
-            parsed.path = "/?url=" + encodeURIComponent(originURL);
-            parsed.protocol = "https:";
-            return parsed;
-        }
-    }
-};
-
-const getInfo = async url => {
-    console.log("[info] getting info");
-    return await ytdl.getInfo(url, ytdlOptions);
-};
-
-
-
 /**
  * Send response headers and data.
  *
@@ -92,14 +69,9 @@ http.createServer(function(request, response) {
 				/**
 				 * @link https://github.com/fent/node-ytdl-core
 				 */
-				const info = await getInfo(youtubeUrl);
-
-    console.log("[info] choosing formats");
-    const videoInfo = ytdl.chooseFormat(info.formats, {
-        quality: "highest",
-        filter: format => format.container === "mp4"
-    });
-					response.end(JSON.stringify(videoInfo.url));
+				ytdl.getInfo(youtubeUrl).then(data => {
+					
+					response.end(JSON.stringify(data));
 				}).catch(error => {
 				
 					sendError(response, error);
@@ -112,4 +84,3 @@ http.createServer(function(request, response) {
   //response.write('Hello World!dd'); //write a response to the client
   //response.end(); //end the response
 }).listen(8080)
-
