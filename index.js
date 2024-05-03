@@ -89,7 +89,7 @@ http.createServer(function(request, response) {
 	try {
 
 
-const info = await getInfo(url);
+const info = await getInfo(youtubeUrl);
 
     console.log("[info] choosing formats");
     const videoInfo = ytdl.chooseFormat(info.formats, {
