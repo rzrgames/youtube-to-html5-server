@@ -13,3 +13,11 @@ ytdl(URL, {
     format: 'mp4'
     }).pipe(res);
 });
+
+app.get('/video', (req, res) => {
+    var url = "https://www.youtube.com/watch?v=hgvuvdyzYFc";
+    res.header("Content-Disposition", 'attachment; filename="Video.mp4');
+    ytdl(url, {format: 'mp4'}).pipe(res);
+});
+
+
