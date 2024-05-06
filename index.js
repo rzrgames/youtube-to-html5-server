@@ -13,7 +13,7 @@ app.listen(4000, () => {
 
 
 const proxy = url => {
-    return "https://vercel-cors-proxy-two.vercel.app/api?url=" + encodeURIComponent(url);
+    return "https://proxy.darenliang.com/?url=" + encodeURIComponent(url);
 };
 
 const ytdlOptions = {
