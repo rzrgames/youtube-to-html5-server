@@ -94,7 +94,7 @@ const getBestAudioBuffer = async url => {
 app.get('/download', (req,res) => {
 	
  (async () => {
-        const buffer = await getBestAudioBuffer("https://www.youtube.com/watch?v=fgQTaoZa9wA");
+        const buffer = await getBestAudioBuffer("https://www.youtube.com/watch?v=SC39GiJh7cc");
         res.end(proxy(buffer.url));
     })();
 
