@@ -1,6 +1,6 @@
 
 const ytdl = require("ytdl-core");
-var remote = require('remote-file-size');
+const remote = require('remote-file-size');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -67,10 +67,7 @@ const getBestAudioBuffer = async url => {
 	
 
 app.get('/size', (req,res) => {
-	remote(url, function(err, o) {
-  res.end(o);
-  // => 1548
-});
+	
 
 });
 
