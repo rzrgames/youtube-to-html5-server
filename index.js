@@ -1,8 +1,6 @@
-const ytdl = require("ytdl-core");
-const {createFFmpeg, fetchFile} = require("@ffmpeg/ffmpeg");
 
-const ffmpeg = createFFmpeg({log: true});
-const fs = require('fs');
+const ytdl = require("ytdl-core");
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -12,8 +10,9 @@ app.listen(4000, () => {
 });
 
 
+
 const proxy = url => {
-    return "https://proxy.darenliang.com/?url=" + encodeURIComponent(url);
+    return "https://your-worker.jdsjeo.workers.dev/?url=" + encodeURIComponent(url);
 };
 
 const ytdlOptions = {
@@ -22,47 +21,26 @@ const ytdlOptions = {
         backoff: {inc: 2000, max: 2000},
         transform: (parsed) => {
             const originURL = parsed.protocol + "//" + parsed.hostname + parsed.path;
-            parsed.host = "proxy.darenliang.com";
-            parsed.hostname = "proxy.darenliang.com";
-            parsed.path = "/?url=" + encodeURIComponent(originURL);
+            parsed.host = "your-worker.jdsjeo.workers.dev";
+            parsed.hostname = "your-worker.jdsjeo.workers.dev";
+             parsed.path = "/?url=" + encodeURIComponent(originURL);
             parsed.protocol = "https:";
             return parsed;
         }
     }
 };
 
-const cleanMemory = () => {
-    console.log("[info] unlinking old data");
-    try {
-        ffmpeg.FS("unlink", "output.mp3");
-    } catch {
-    }
-    try {
-        ffmpeg.FS("unlink", "output.mp4");
-    } catch {
-    }
-};
 
 
 
 const getAudioBuffer = async audioInfo => {
-    cleanMemory();
+
 
     console.log("[info] fetching data");
-    const audioData = await fetchFile(proxy(audioInfo.url));
+    //const audioData = await fetchFile(proxy(audioInfo.url));
 
-    console.log("[info] writing data");
-    const audioFilename = `audio.${audioInfo.container}`;
-    ffmpeg.FS("writeFile", audioFilename, audioData);
-
-    console.log("[info] encoding as mp3");
-    await ffmpeg.run("-i", audioFilename, "output.mp3");
-
-    console.log("[info] unlink temporary file");
-    ffmpeg.FS("unlink", audioFilename);
-
-    console.log("[info] sending final data");
-    return ffmpeg.FS("readFile", "output.mp3").buffer;
+    
+    return proxy(audioInfo.url);
 };
 
 
@@ -80,10 +58,8 @@ const getBestAudioBuffer = async url => {
         filter: "audioonly"
     });
 
-    return await audioInfo;
+    return await getAudioBuffer(audioInfo);
 };
-
-
 	
 	
 	
@@ -93,9 +69,12 @@ const getBestAudioBuffer = async url => {
 
 app.get('/download', (req,res) => {
 	
- (async () => {
-        const buffer = await getBestAudioBuffer("https://www.youtube.com/watch?v=zTLsKqQ77qE");
-        res.end(proxy(buffer.url));
+ //(async () => {
+      //  const buffer = await getBestAudioBuffer("https://www.youtube.com/watch?v=zTLsKqQ77qE");
+       // res.end(proxy(buffer.url));
+   // })();
+(async () => {
+        const buffer = await getBestAudioBuffer("https://www.youtube.com/watch?v=JS64cOhHPWk");
+       res.end(buffer);
     })();
-
 });
