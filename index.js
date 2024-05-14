@@ -67,7 +67,10 @@ const getBestAudioBuffer = async url => {
 	
 
 app.get('/size', (req,res) => {
-	
+	remote(url, function(err, o) {
+  res.end(o)
+  // => 1548
+});
 
 });
 
