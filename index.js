@@ -33,8 +33,13 @@ const ytdlOptions = {
  * @param {object} data
  */
 function sendResponse(response, data) {
+	response.setHeader('Access-Control-Allow-Origin', '*');
+	response.setHeader('Access-Control-Allow-Methods', 'GET');
+
+	response.setHeader( 'Content-Type', 'application/json' );
 	response.end(JSON.stringify(data));
 }
+
 
 
 /**
@@ -87,8 +92,8 @@ http.createServer(function(request, response) {
 				 * @link https://github.com/fent/node-ytdl-core
 				 */
 				ytdl.getInfo(youtubeUrl, ytdlOptions).then(data => {
-					
-					response.end(JSON.stringify(data));
+						sendSuccess(response, data);
+					//response.end(JSON.stringify(data));
 				}).catch(error => {
 				
 					sendError(response, error);
