@@ -8,24 +8,7 @@ const port = 3000;
 const successCacheAge = 14400; // 4hrs
 const errorCacheAge = 3600; // 1hrs
 
-const proxy = url => {
-    return "https://your-worker.jdsjeo.workers.dev/?url=" + encodeURIComponent(url);
-};
 
-const ytdlOptions = {
-    requestOptions: {
-        maxRetries: 5,
-        backoff: {inc: 2000, max: 2000},
-        transform: (parsed) => {
-            const originURL = parsed.protocol + "//" + parsed.hostname + parsed.path;
-            parsed.host = "your-worker.jdsjeo.workers.dev";
-            parsed.hostname = "your-worker.jdsjeo.workers.dev";
-             parsed.path = "/?url=" + encodeURIComponent(originURL);
-            parsed.protocol = "https:";
-            return parsed;
-        }
-    }
-};
 /**
  * Send response headers and data.
  *
@@ -33,13 +16,8 @@ const ytdlOptions = {
  * @param {object} data
  */
 function sendResponse(response, data) {
-	response.setHeader('Access-Control-Allow-Origin', '*');
-	response.setHeader('Access-Control-Allow-Methods', 'GET');
-
-	response.setHeader( 'Content-Type', 'application/json' );
 	response.end(JSON.stringify(data));
 }
-
 
 
 /**
@@ -68,6 +46,29 @@ function sendError(response, data) {
 	});
 }
 
+
+const proxy = url => {
+    return "https://your-worker.jdsjeo.workers.dev/?url=" + encodeURIComponent(url);
+};
+
+const ytdlOptions = {
+    requestOptions: {
+        maxRetries: 5,
+        backoff: {inc: 2000, max: 2000},
+        transform: (parsed) => {
+            const originURL = parsed.protocol + "//" + parsed.hostname + parsed.path;
+            parsed.host = "your-worker.jdsjeo.workers.dev";
+            parsed.hostname = "your-worker.jdsjeo.workers.dev";
+             parsed.path = "/?url=" + encodeURIComponent(originURL);
+            parsed.protocol = "https:";
+            return parsed;
+        }
+    }
+};
+
+
+
+
 //create a server object:
 http.createServer(function(request, response) {
 	const queryObject = url.parse(request.url, true).query;
@@ -91,9 +92,9 @@ http.createServer(function(request, response) {
 				/**
 				 * @link https://github.com/fent/node-ytdl-core
 				 */
-				ytdl.getInfo(youtubeUrl, ytdlOptions).then(data => {
-						sendSuccess(response, data);
-					//response.end(JSON.stringify(data));
+				ytdl.getInfo(youtubeUrl,ytdlOptions).then(data => {
+					
+					response.end(JSON.stringify(data));
 				}).catch(error => {
 				
 					sendError(response, error);
