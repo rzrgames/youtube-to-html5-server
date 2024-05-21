@@ -47,24 +47,7 @@ function sendError(response, data) {
 }
 
 
-const proxy = url => {
-    return "https://your-worker.jdsjeo.workers.dev/?url=" + encodeURIComponent(url);
-};
 
-const ytdlOptions = {
-    requestOptions: {
-        maxRetries: 5,
-        backoff: {inc: 2000, max: 2000},
-        transform: (parsed) => {
-            const originURL = parsed.protocol + "//" + parsed.hostname + parsed.path;
-            parsed.host = "your-worker.jdsjeo.workers.dev";
-            parsed.hostname = "your-worker.jdsjeo.workers.dev";
-             parsed.path = "/?url=" + encodeURIComponent(originURL);
-            parsed.protocol = "https:";
-            return parsed;
-        }
-    }
-};
 
 
 
@@ -92,7 +75,7 @@ http.createServer(function(request, response) {
 				/**
 				 * @link https://github.com/fent/node-ytdl-core
 				 */
-				ytdl.getInfo(youtubeUrl,ytdlOptions).then(data => {
+				ytdl.getInfo(youtubeUrl).then(data => {
 					
 					response.end(JSON.stringify(data));
 				}).catch(error => {
